@@ -1,14 +1,11 @@
 ---
-title: API Reference
+title: Bucketlist API
 
 language_tabs:
-  - shell
-  - ruby
-  - python
-  - javascript
+  - shell: cURL
 
 toc_footers:
-  - <a href='#'>Sign Up for a Developer Key</a>
+  - <a href='#'>Github</a>
   - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
 
 includes:
@@ -19,171 +16,219 @@ search: true
 
 # Introduction
 
-Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.
+According to Merriam-Webster Dictionary, a Bucket List is a list of things that one has not done before but wants to do before dying.
 
-We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.
+This API application will serve to enable registered users to post bucket lists, bucket list 
+items and keep track of them. A registered user can:
 
-This example API documentation page was created with [Slate](https://github.com/tripit/slate). Feel free to edit it and use it as a base for your own API's documentation.
+1. Post bucket lists.
+2. Delete bucket lists.
+3. View all bucketlists with their items.
+3. Edit the bucket list names.
+4. Add bucketlist items to individual bucketlists.
+5. Edit the bucketlist items.
+5. Update the ites as 'done' when the user accomplishes them.
+    
 
-# Authentication
+# Registration
 
-> To authorize, use this code:
+To use the Bucketlist API application, users are required to register with the service.
 
-```ruby
-require 'kittn'
+Registration details required are:
 
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-```
+1. **user_email** : The user's email address. It must be made up of a local-part, an @ symbol, 
+then a 
+case-insensitive domain. Version 2 of will include validation for the domain.
+2. **user_password**: This is a string that must be at least 8 digits long, must include an 
+uppercase 
+letter, lowercase letter and a digit.
+3. **confirm_password**: This is a string that must be equal to the **user_password** string.
 
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-```
-
-```shell
-# With shell, you can just pass the correct header with each request
-curl "api_endpoint_here"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-```
-
-> Make sure to replace `meowmeowmeow` with your API key.
-
-Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our [developer portal](http://example.com/developers).
-
-Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:
-
-`Authorization: meowmeowmeow`
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-# Kittens
-
-## Get All Kittens
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get()
-```
+> The json request is formatted thus:
 
 ```shell
-curl "http://example.com/api/kittens"
-  -H "Authorization: meowmeowmeow"
+curl "/api/v1/auth/register/"
+```
+```json
+[
+  {
+  "user_email": "dan@gmail.com",
+  "user_password": "Qwerty123",
+  "confirm_password": "Qwerty123"
+  }
+]
+```
+```shell
+curl "/api/v1/auth/register/"
+```
+> On successful registration, the user will receive such a message:
+
+```json
+[
+  {
+    "user_email": "dan@gmail.com",
+    "date_registered": "2017-07-06T17:12:53.104342+00:00",
+    "id": 1,
+    "message": "Registration successful, welcome to Bucketlist"
+  }
+]
 ```
 
-```javascript
-const kittn = require('kittn');
+If there are any anomalies with the registration, the API request, the returned json will have 
+all the details of the error.
 
-let api = kittn.authorize('meowmeowmeow');
-let kittens = api.kittens.get();
+For example:
+
+> When a user is already registered, the json response will be:
+
+```json
+[
+  {
+    "message": "Registration Failure. User dan@gmail.com already registered"
+  }
+]
+```
+
+# User Login
+
+This endpoint is for registered users to log into the service, and be able to access their own 
+bucketlists(if any) and post new bucketlists and bucketlist items. The required parameters are a 
+registered user email and a matching password. 
+
+> The request is formatted as below
+
+```shell
+ curl "/api/v1/auth/login/"
+```
+```json
+[
+  {
+  "user_email": "dan@gmail.com",
+  "user_password": "Qwerty123"
+  }
+]
 ```
 
 > The above command returns JSON structured like this:
 
 ```json
 [
-  {
-    "id": 1,
-    "name": "Fluffums",
-    "breed": "calico",
-    "fluffiness": 6,
-    "cuteness": 7
-  },
-  {
-    "id": 2,
-    "name": "Max",
-    "breed": "unknown",
-    "fluffiness": 5,
-    "cuteness": 10
-  }
+{
+    "access_token": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0OTkzNTQ2MzAsImlhdCI6MTQ5OTM1MTYzMCwic3ViIjo4fQ.9neRwXsHZP6D0XnAlrpGgFpvbLuyveSqT9kCZCuHa-8",
+    "message": "Login successful"
+}
 ]
 ```
 
-This endpoint retrieves all kittens.
+The `access_token` value will be used in subsequent request headers for token authentication 
+purposes.
 
-### HTTP Request
 
-`GET http://example.com/api/kittens`
-
-### Query Parameters
-
-Parameter | Default | Description
---------- | ------- | -----------
-include_cats | false | If set to true, the result will also include cats.
-available | true | If set to false, the result will include kittens that have already been adopted.
-
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-## Get a Specific Kitten
-
-```ruby
-require 'kittn'
-
-api = Kittn::APIClient.authorize!('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```python
-import kittn
-
-api = kittn.authorize('meowmeowmeow')
-api.kittens.get(2)
-```
-
-```shell
-curl "http://example.com/api/kittens/2"
-  -H "Authorization: meowmeowmeow"
-```
-
-```javascript
-const kittn = require('kittn');
-
-let api = kittn.authorize('meowmeowmeow');
-let max = api.kittens.get(2);
-```
-
-> The above command returns JSON structured like this:
+> When the email provided is not registered, the API will return a JSON with the appropriate error 
+message and status_code.
 
 ```json
+[
+    {
+        "message": "User dans@gmail.com does not exist. Register to access the service"
+    }
+]
+```
+# Bucketlist manipulations
+ 
+This endpoint is for a logged in user to post, and view existing bucketlists.
+
+## POST
+`POST http://127.0.0.1:5000/api/v1/bucketlists/`
+
+This operation enables a user to post a new bucketlist
+
+### Post Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+name | None | Name of the bucketlist.
+
+> The request JSON is formatted as below
+
+```json
+[
 {
-  "id": 2,
-  "name": "Max",
-  "breed": "unknown",
-  "fluffiness": 5,
-  "cuteness": 10
+  "name": "Travel The World",
+  "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0OTkzNTQ2MzAsImlhdCI6MTQ5OTM1MTYzMCwic3ViIjo4fQ.9neRwXsHZP6D0XnAlrpGgFpvbLuyveSqT9kCZCuHa-8",
+
 }
+]
 ```
 
-This endpoint retrieves a specific kitten.
+> The return JSON is as below:
 
-<aside class="warning">Inside HTML code blocks like this one, you can't use Markdown, so use <code>&lt;code&gt;</code> blocks to denote code.</aside>
+ ```json
+[
+{
+    "date_created": "2017-06-25 10:26:29",
+    "date_modified": "2017-06-28 07:45:02",
+    "id": 1,
+    "name": "Travel the world",
+    "owner_id": 8
+}
+]
+```
 
-### HTTP Request
+## GET
 
-`GET http://example.com/kittens/<ID>`
+`GET http://127.0.0.1:5000/api/v1/bucketlists/?q=free&limit=40`
 
-### URL Parameters
+This command will get a users buckelists
 
-Parameter | Description
---------- | -----------
-ID | The ID of the kitten to retrieve
+### Get Parameters
+
+
+### Post Parameters
+Parameter | Default | Description
+--------- | ------- | -----------
+q | '' | Query string.
+limit | 20 | Pagination limit of results per page
+
+> A GET operation without any parameters is shwon below
+
+`GET http://127.0.0.1:5000/api/v1/bucketlists`
+
+> The response JSON will be the list of all bucketlists belonging to the user.
+
+```json
+[
+    {
+        "date_created": "2017-07-06 18:47:34",
+        "date_modified": "2017-07-06 18:47:34",
+        "id": 1,
+        "items": [],
+        "name": "Travel the world",
+        "owner_id": 8
+    }
+]
+```
+
+> A search parameter that has no hits will return the JSON below
+
+`GET http://127.0.0.1:5000/api/v1/bucketlists/?q=food`
+
+```json
+[
+{
+    "message": "No bucketlists with provided search parameter"
+}
+]
+```
+## Single Bucketlist Operations
+
+### GET
+### PUT
+### DELETE
+
+## Bucketlist Items Manipulation
+### POST
+
+## Bucketlist Item Operations
+### PUT
+### DELETE
 
