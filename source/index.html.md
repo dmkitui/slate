@@ -5,8 +5,8 @@ language_tabs:
   - shell: cURL
 
 toc_footers:
-  - <a href='#'>Github</a>
-  - <a href='https://github.com/tripit/slate'>Documentation Powered by Slate</a>
+  - <a href='https://github.com/dmkitui/BucketList/tree/develop'>dmkitui</a>
+  - <a href='www.andela.com'>Andela</a>
 
 includes:
   - errors
@@ -61,7 +61,7 @@ curl "/api/v1/auth/register/"
 ```shell
 curl "/api/v1/auth/register/"
 ```
-> On successful registration, the user will receive such a message:
+> On successful registration, the user will receive such a message in the response body:
 
 ```json
 [
@@ -74,7 +74,7 @@ curl "/api/v1/auth/register/"
 ]
 ```
 
-If there are any anomalies with the registration, the API request, the returned json will have 
+If there are any anomalies with the registration in the API request, the returned json will have 
 all the details of the error.
 
 For example:
@@ -222,13 +222,172 @@ limit | 20 | Pagination limit of results per page
 ## Single Bucketlist Operations
 
 ### GET
-### PUT
-### DELETE
+
+`GET api/v1/bucketlist/bucketlist_id`
+
+The request fields are:
+
+Parameter | Default | Description
+--------- | ------- | -----------
+bucketlist_id | None | Id for the bucketlist you need
+ 
+> The response body, if the bucketlist exists will look like:
+
+```json
+[
+    {
+        "date_created": "2017-07-10 08:17:24",
+        "date_modified": "2017-07-10 08:17:24",
+        "id": 2,
+        "items": [],
+        "name": "Learn Useful Programming  Skills",
+        "owner_id": 11
+    }
+]
+```
+
+> If the bucketlist doest exist, the response body will be:
+
+```json
+[
+{
+    "message": "That bucketlist item does not exist"
+}
+]
+```
+
+### Edit a particular bucketlist
+
+`PUT api/v1/bucketlist/bucketlist_id`
+
+Used to edit the name of bucketlist of the given ID.
+
+The request body is composed of:
+
+Parameter | Default | Description
+--------- | ------- | -----------
+name | None | Name to amend/update the bucketlist with.
+
+> The request JSON will as follows:
+
+```json
+[
+{
+  "name":"New bucketlist name"
+}
+]
+```
+> The operation if successful will return a JSON response as below:
+
+```json
+[
+{
+    "id": 2,
+    "date_created": "2017-07-10 08:17:24",
+    "date_modified": "2017-07-10 15:27:19",
+    "name": "Eat healthy",
+    "owner_id": 11,
+    "message": "Bucketlist updated"
+}
+]
+```
+
+### Delete a bucketlist
+
+`DELETE api/v1/bucketlist/bucketlist_id`
+
+Used to delete a bucketlist with id bucketlist_id
+
+The request body has the following parameter:
+
+Parameter | Default | Description
+--------- | ------- | -----------
+bucketlist_id | None | ID for the bucketlist to be deleted
+
+> If the delete is successful, the response will look like the below:
+
+```json
+[
+{
+    "message": "Bucketlist No 2 deleted successfully"
+}
+]
+```
 
 ## Bucketlist Items Manipulation
-### POST
+### Add bucketlist Item
 
-## Bucketlist Item Operations
-### PUT
-### DELETE
+`POST api/v1/bucketlist/bucketlist_id/items/`
+
+Used to add item to bucketlist with id bucketlist_id
+
+Required json body fields are:
+
+Parameter | Default | Description
+--------- | ------- | -----------
+
+item_name | None | The items name eg Visit Hawai
+
+If the item name is missing, the response message will specify the error.
+
+> The response JSON for a successful POST is below:
+
+```json
+[
+{
+    "bucketlist_id": 1,
+    "date_created": "2017-07-10 15:47:08",
+    "date_modified": "2017-07-10 15:47:08",
+    "done": false,
+    "id": 1,
+    "item_name": "Eat honey daily."
+}
+]
+```
+### Edit bucketlist item
+
+`PUT api/v1/bucketlist/bucketlist_id/items/item_id`
+
+Used to edit an item with item_id of bucketlist with id bucketlist_id.
+
+The required fields can be either *name* or *done*:
+
+Parameter | Default | Description
+--------- | ------- | -----------
+item_name | None | To edit the name of the item
+done | False | To edit status of the item.
+
+> The response JSON for a successful is as below:
+
+```json
+[
+{
+    "id": 1,
+    "date_created": "2017-07-10 15:47:08",
+    "date_modified": "2017-07-10 15:52:25",
+    "bucketlist_id": 46,
+    "item_name": "Eat honey daily.",
+    "done": true,
+    "message": " Status updated . Item 1 successfully updated"
+}
+]
+```
+### Delete bucketlist item
+
+`DELETE api/v1/bucketlist/bucketlist_id/items/item_id`
+
+Used to delete an item with item_id of bucketlist with id bucketlist_id.
+
+> The response JSON for a successful delete is as below:
+
+```json
+[
+{
+    "message": "Bucketlist item No 1 deleted successfully"
+}
+]
+```
+
+
+
 
