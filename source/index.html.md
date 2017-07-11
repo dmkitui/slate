@@ -387,7 +387,3 @@ Used to delete an item with item_id of bucketlist with id bucketlist_id.
 }
 ]
 ```
-
-
-
-
