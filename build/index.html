@@ -262,7 +262,7 @@ letter, lowercase letter and a digit.</li>
 <blockquote>
 <p>The json request is formatted thus:</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code>curl <span class="s2">"/api/v1/auth/register/"</span>
+<pre class="highlight shell tab-shell"><code>curl <span class="s2">"/api/v1/auth/register"</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
   </span><span class="s2">"user_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dan@gmail.com"</span><span class="p">,</span><span class="w">
@@ -270,8 +270,7 @@ letter, lowercase letter and a digit.</li>
   </span><span class="s2">"confirm_password"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Qwerty123"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
-</span></code></pre><pre class="highlight shell tab-shell"><code>curl <span class="s2">"/api/v1/auth/register/"</span>
-</code></pre>
+</span></code></pre>
 <blockquote>
 <p>On successful registration, the user will receive such a message in the response body:</p>
 </blockquote>
@@ -307,7 +306,7 @@ registered user email and a matching password. </p>
 <blockquote>
 <p>The request is formatted as below</p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code> curl <span class="s2">"/api/v1/auth/login/"</span>
+<pre class="highlight shell tab-shell"><code> curl <span class="s2">"/api/v1/auth/login"</span>
 </code></pre><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
   </span><span class="s2">"user_email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dan@gmail.com"</span><span class="p">,</span><span class="w">
@@ -663,13 +662,13 @@ message and status_code.</p>
 </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
-          <h1 id="error-codes">Error Codes</h1>
+          <h1 id="status-codes">Status Codes</h1>
 
 <p>The Bucketlist API uses the following error codes:</p>
 
 <table><thead>
 <tr>
-<th>Error Code</th>
+<th>Status Code</th>
 <th>Meaning</th>
 </tr>
 </thead><tbody>
