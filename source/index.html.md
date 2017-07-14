@@ -47,7 +47,7 @@ letter, lowercase letter and a digit.
 > The json request is formatted thus:
 
 ```shell
-curl "/api/v1/auth/register/"
+curl "/api/v1/auth/register"
 ```
 ```json
 [
@@ -57,9 +57,6 @@ curl "/api/v1/auth/register/"
   "confirm_password": "Qwerty123"
   }
 ]
-```
-```shell
-curl "/api/v1/auth/register/"
 ```
 > On successful registration, the user will receive such a message in the response body:
 
@@ -98,7 +95,7 @@ registered user email and a matching password.
 > The request is formatted as below
 
 ```shell
- curl "/api/v1/auth/login/"
+ curl "/api/v1/auth/login"
 ```
 ```json
 [
